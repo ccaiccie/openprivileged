@@ -1,0 +1,34 @@
+[project]
+name = "openprivileged"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = ["vg-core", "vg-api"]
+
+[tool.uv.workspace]
+members = ["packages/*"]
+
+[tool.uv.sources]
+vg-core = { workspace = true }
+vg-api = { workspace = true }
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "httpx>=0.27",
+    "ruff>=0.8",
+    "mypy>=1.13",
+    "playwright>=1.65.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests/unit"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+strict = true
+packages = ["vg_core", "vg_api"]

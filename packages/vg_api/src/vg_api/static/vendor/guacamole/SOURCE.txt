@@ -1,0 +1,4 @@
+Apache Guacamole client 1.6.0 official source modules concatenated alphabetically.
+https://codeload.github.com/apache/guacamole-client/tar.gz/refs/tags/1.6.0
+archive sha256 de5c489471544f93dfc0cc821cf95805aaf9b84e2e3314b6d52e41aeeffd7c16
+Local adapter: WebSocketTunnel accepts optional subprotocols for CSRF header; connect() does not append query data. Server owns all connection parameters.

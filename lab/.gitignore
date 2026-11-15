@@ -1,0 +1,5 @@
+.env
+*.iso
+*.qcow2
+__pycache__/
+.venv/

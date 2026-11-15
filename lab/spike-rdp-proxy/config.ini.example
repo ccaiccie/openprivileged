@@ -1,0 +1,38 @@
+; Starting point for the Mode B spike. Copy to config.ini. Key names follow FreeRDP's proxy server config;
+; verify every key against `freerdp-proxy --help` / the FreeRDP proxy docs for the installed version,
+; because the format changes between releases.
+;
+; Static target credentials like these only prove the two-leg connection. The real question for the spike is
+; whether the client leg can authenticate with a per-grant one-time token and the target leg can use a
+; credential injected at connect time (proxy module / plugin hook). See README.md, test T4.
+
+[Server]
+Host = 0.0.0.0
+Port = 3389
+
+[Target]
+Host = 10.77.0.21
+Port = 3389
+FixedTarget = true
+User = vgadmin
+Password = REPLACE_LAB_ONLY
+Domain = WS1
+
+[Channels]
+GFX = true
+DisplayControl = true
+Clipboard = false
+AudioOutput = false
+RemoteApp = false
+
+[Security]
+ServerTlsSecurity = true
+ServerNlaSecurity = false
+ServerRdpSecurity = false
+ClientTlsSecurity = true
+ClientNlaSecurity = true
+ClientRdpSecurity = false
+
+[Certificates]
+CertificateFile = /etc/freerdp-proxy/certs/proxy.crt
+PrivateKeyFile = /etc/freerdp-proxy/certs/proxy.key

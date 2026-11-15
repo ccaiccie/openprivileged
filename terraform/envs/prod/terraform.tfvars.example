@@ -1,0 +1,19 @@
+# Copy to terraform.tfvars (git-ignored) and edit. No secrets belong in this file.
+project_id         = "vaultgate-prod-123456"
+region             = "europe-west1"
+domain             = "app.vaultgate.example"
+alert_email        = "oncall@example.com"
+github_repository  = "your-org/vaultgate"
+allowed_ref_prefix = "refs/tags/v"
+image_tag          = "bootstrap" # switch to a released tag after the first CI build
+
+# Sizing: 10 customers (defaults). For 100: db-custom-4-16384, 100 GB, Redis 2 GB.
+# For 1,000: db-custom-8-32768 + replica (add later), 500 GB, Redis 5 GB.
+sql_tier        = "db-custom-2-8192"
+sql_disk_gb     = 50
+redis_memory_gb = 1
+
+recordings_retention_days = 365
+audit_retention_days      = 365
+lock_retention            = false # set true only when retention is final (irreversible)
+enable_ssh_gateway        = false

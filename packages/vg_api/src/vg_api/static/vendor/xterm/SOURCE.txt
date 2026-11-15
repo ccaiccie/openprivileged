@@ -1,0 +1,4 @@
+@xterm/xterm 6.0.0
+https://registry.npmjs.org/@xterm/xterm/-/xterm-6.0.0.tgz
+sha512-TQwDdQGtwwDt+2cgKDLn0IRaSxYu1tSUjgKarSDkUM0ZNiSRXFpjxEsvc/Zgc5kq5omJ+V0a8/kIM2WD3sMOYg==
+Local CSP adaptation: four dynamic style creation sites delegate to vaultgateStyleElement(document), which applies the response-specific nonce. No unsafe-inline style permission.

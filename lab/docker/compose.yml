@@ -1,0 +1,52 @@
+# Local stand-ins for the GCP pieces and the RDP gateways. Lab only; passwords here are throwaway.
+#   docker compose -f lab/docker/compose.yml up -d guacd            # RDP mode A gateway
+#   docker compose -f lab/docker/compose.yml --profile platform up -d   # Postgres, Redis, MinIO (GCS stand-in)
+#   docker compose -f lab/docker/compose.yml --profile spike up --build rdp-proxy   # RDP mode B spike
+# Containers reach the lab VMs (10.77.0.0/24) through the host's virbr-vglab bridge via Docker's default NAT.
+# The VaultGate Python services are not built yet; add them here as they exist (api, broker, worker, collector).
+name: vglab
+
+services:
+  guacd:
+    image: guacamole/guacd:1.5.5   # Apache-2.0; pin and verify the tag before use
+    ports: ["127.0.0.1:4822:4822"]
+    volumes:
+      - guac-recordings:/recordings
+    restart: unless-stopped
+
+  postgres:
+    profiles: ["platform"]
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: lab-only-postgres
+      POSTGRES_DB: vaultgate
+    ports: ["127.0.0.1:5432:5432"]
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+
+  redis:
+    profiles: ["platform"]
+    image: redis:7
+    ports: ["127.0.0.1:6379:6379"]
+
+  minio:
+    profiles: ["platform"]
+    image: minio/minio:latest     # stand-in for Cloud Storage; pin a release tag before relying on it
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: labminio
+      MINIO_ROOT_PASSWORD: lab-only-minio
+    ports: ["127.0.0.1:9000:9000", "127.0.0.1:9001:9001"]
+    volumes: ["miniodata:/data"]
+
+  rdp-proxy:
+    profiles: ["spike"]
+    build: ../spike-rdp-proxy
+    ports: ["127.0.0.1:3389:3389"]   # point mstsc at localhost:3389 for the Mode B spike
+    volumes:
+      - ../spike-rdp-proxy/config.ini:/etc/freerdp-proxy/config.ini:ro
+      - ../spike-rdp-proxy/certs:/etc/freerdp-proxy/certs:ro
+
+volumes:
+  guac-recordings:
+  pgdata:
+  miniodata:

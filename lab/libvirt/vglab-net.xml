@@ -1,0 +1,10 @@
+<!-- Isolated libvirt network for the VaultGate lab. No <forward> element = host-only:
+     VMs can reach each other and the host (10.77.0.1) but not your LAN or the internet.
+     Static IPs are assigned inside the guests (see lab/windows/*.ps1), so DHCP is off.
+       dc1 10.77.0.11   dc2 10.77.0.12   ws1 10.77.0.21   host 10.77.0.1
+     Define with: virsh net-define lab/libvirt/vglab-net.xml && virsh net-start vglab -->
+<network>
+  <name>vglab</name>
+  <bridge name="virbr-vglab" stp="on" delay="0"/>
+  <ip address="10.77.0.1" netmask="255.255.255.0"/>
+</network>

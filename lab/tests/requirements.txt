@@ -1,0 +1,4 @@
+# Lab test dependencies only (throwaway venv, never imported by product code).
+# ldap3 is LGPL-3.0 and is used here purely as a test client; see LICENSES.md before choosing the product library.
+ldap3>=2.9.1
+pypsrp>=0.8.1

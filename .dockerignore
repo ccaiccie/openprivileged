@@ -1,0 +1,19 @@
+# Allowlist build context: no credentials, lab manifests, logs, tests or venvs.
+**
+!pyproject.toml
+!uv.lock
+!packages/
+!packages/vg_core/
+!packages/vg_core/pyproject.toml
+!packages/vg_core/src/
+!packages/vg_core/src/**
+!packages/vg_api/
+!packages/vg_api/pyproject.toml
+!packages/vg_api/src/
+!packages/vg_api/src/**
+!lab/
+!lab/docker/
+!lab/docker/rotation/
+!lab/docker/rotation/Dockerfile
+**/__pycache__/**
+**/*.pyc

@@ -1,0 +1,10 @@
+# Copy to terraform.tfvars (git-ignored) and edit. No secrets belong in this file.
+project_id         = "vaultgate-dev-123456"
+region             = "europe-west1"
+domain             = "dev.vaultgate.example"
+alert_email        = "oncall@example.com"
+github_repository  = "your-org/vaultgate"
+allowed_ref_prefix = "refs/heads/main"
+image_tag          = "bootstrap" # switch to a real tag after the first CI build
+sql_tier           = "db-f1-micro"
+enable_ssh_gateway = false

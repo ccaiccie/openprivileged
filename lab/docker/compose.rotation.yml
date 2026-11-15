@@ -1,0 +1,46 @@
+# Opt-in Linux deployment; do NOT start while the host process owns this vault.
+# Separate from compose.yml: no existing lab containers/services are changed.
+name: vaultgate-rotation
+services:
+  combined:
+    image: vaultgate-rotation:local
+    build:
+      context: ../..
+      dockerfile: lab/docker/rotation/Dockerfile
+      args:
+        VG_UID: ${VG_UID:?Set the vault owner UID}
+        VG_GID: ${VG_GID:?Set the vault owner GID}
+    # Same numeric owner as the approved host vault/secret files (never root).
+    user: "${VG_UID:?Set the vault owner UID}:${VG_GID:?Set the vault owner GID}"
+    # Existing guacd is host-loopback 4823. Keep the API at host-loopback 8766.
+    # Linux host networking is deliberate; this is NOT network isolation.
+    network_mode: host
+    extra_hosts:
+      - "DC1.example.local:192.0.2.116"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 128
+    ulimits:
+      core: 0
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m,mode=1777
+    volumes:
+      - type: bind
+        source: ${VG_VAULT_DIR:?Set an existing dedicated vault directory}
+        target: /var/lib/vaultgate/vault
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${VG_SECRETS_DIR:?Set an existing dedicated secrets directory}
+        target: /run/vaultgate-secrets
+        read_only: true
+        bind:
+          create_host_path: false
+    restart: unless-stopped
+    stop_grace_period: 120s
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
