@@ -16,7 +16,7 @@ Nothing has been pushed or published automatically.
 
 ## What is intentionally absent
 
-Runtime credentials, vault/state, SSH keys, GNS3 inventory/manifest and personal
+Runtime credentials, vault/state, SSH keys, private lab inventory/manifest and personal
 FRR migration helpers; virtual environments/caches; operational logs, screenshots,
 internal product/business plans and generated planning decks.
 
@@ -32,7 +32,7 @@ original private domain/address has been replaced with example.local and
 192.0.2.116 (documentation-only address). It cannot operate against the original
 lab as shipped. Do not weaken allowlists to make it work; review the managed AD
 configuration documentation and explicitly configure/test an isolated environment.
-References to GNS3 files in optional integration scripts/runbooks require an
+References to private lab files in optional integration scripts/runbooks require an
 operator-provided private inventory; these files are deliberately not shipped.
 
 A hosted SaaS offering is separate future work. This snapshot does not claim

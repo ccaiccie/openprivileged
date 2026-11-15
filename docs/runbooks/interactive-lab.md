@@ -5,7 +5,7 @@ The application must bind loopback; do not put this demo behind a public tunnel.
 
 This optional workflow requires your own operator-approved private inventory,
 desktop credential file and pinned RDP manifest. The machine-specific
-`lab/gns3/inventory.json` and `lab/gns3/manifest.json` are intentionally not
+`/path/to/private-lab/inventory.json` and `/path/to/private-lab/manifest.json` are intentionally not
 included. Replace those example path references below with your private files;
 these commands are not a ready-to-run lab deployment.
 
@@ -13,7 +13,7 @@ Launch from the repository (the launcher installs the locked dependencies):
 
 ```bash
 ./run-demo.sh --port 8797 \
-  --lab-inventory lab/gns3/inventory.json \
+  --lab-inventory /path/to/private-lab/inventory.json \
   --desktop-credentials /path/to/private-lab/desktop-credentials.json
 ```
 
@@ -25,7 +25,7 @@ commands and `vtysh`. Disconnect closes the browser channel; Revoke prevents
 reconnection and closes the active bridge within roughly one second.
 
 Optional RDP integration requires the separately approved, loopback-only guacd
-sidecar at 127.0.0.1:4823 and `--rdp-manifest lab/gns3/manifest.json`. The manifest
+sidecar at 127.0.0.1:4823 and `--rdp-manifest /path/to/private-lab/manifest.json`. The manifest
 contains the explicit desktop certificate fingerprint. No arbitrary targets,
 client-supplied credentials or certificate bypass are accepted. Browser RDP
 verification status must be checked in the accompanying test report; the presence

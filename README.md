@@ -70,7 +70,7 @@ values only. Multi-process operation is unsupported until transactional persiste
 3. Durable expiry/outbox worker and policy administration with audit.
 4. KMS-backed credential vault, then SSH broker and verified withdrawal against a lab.
 
-Included lab/Terraform files are reference scaffolding, not deployed services or completed product features. Machine-specific GNS3 and FRR pilot automation is intentionally excluded.
+Included lab/Terraform files are reference scaffolding, not deployed services or completed product features. Machine-specific network lab and FRR pilot automation is intentionally excluded.
 
 ### Development environments
 

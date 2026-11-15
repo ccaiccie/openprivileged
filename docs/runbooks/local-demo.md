@@ -67,7 +67,7 @@ not an older demo tab. Use that launch's generated password; restarting changes 
 Do not restart a process merely to fix the URL: in-memory state would be lost.
 
 ## Explicit direct lab entitlement and SSH test
-Run with --lab-inventory lab/gns3/inventory.json once that inventory and its verified
+Run with --lab-inventory /path/to/private-lab/inventory.json once that inventory and its verified
 lab endpoints have been provisioned. Existing processes are not hot-reloaded; starting
 a separate port preserves their state. Inventory is operator-controlled, not editable
 through an unauthenticated browser request. Each device lists exact entitled usernames.
@@ -89,7 +89,7 @@ approved isolated lab; that is not a OpenPrivileged-mediated RDP/VNC session.
 
 Opt-in real lab verification (performs only the configured read-only FRR SSH probe):
 
-    uv run --no-sync python tests/integration/lab_ssh_smoke.py --inventory lab/gns3/inventory.json
+    uv run --no-sync python tests/integration/lab_ssh_smoke.py --inventory /path/to/private-lab/inventory.json
 
 This launches a separate local app, uses generated test identities, creates direct
 one-minute grants for the three explicitly entitled FRR devices, checks pinned-key

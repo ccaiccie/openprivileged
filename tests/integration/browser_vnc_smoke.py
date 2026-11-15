@@ -21,7 +21,7 @@ from pathlib import Path
 import uvicorn
 from vg_api.main import create_app,demo
 from vg_api.desktop_bridge import load_desktop_target
-plane,tokens=demo(Path('lab/gns3/inventory.json'))
+plane,tokens=demo(Path('/path/to/private-lab/inventory.json'))
 target=load_desktop_target(Path('/path/to/private-lab/desktop-credentials.json'))
 app=create_app(plane,tokens,demo_ui=True,demo_passwords={'tech':'browser-test-only'},
  desktop_targets={'vg-ubuntu-vnc':target})
