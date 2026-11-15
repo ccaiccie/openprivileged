@@ -73,19 +73,20 @@ a separate port preserves their state. Inventory is operator-controlled, not edi
 through an unauthenticated browser request. Each device lists exact entitled usernames.
 Being an Admin or in the same tenant alone does not grant direct entitlement.
 
-For an entitled technician/admin: Devices -> Direct access -> reason and duration.
-The grant is immediately active without creating an approval request. Grants -> Test SSH
+For an entitled technician/admin, Devices -> Connect establishes or reuses an
+active standing grant without an approval request or duration dialog. API clients
+may also request time-bounded direct grants. Grants -> Test SSH
 runs only a fixed read-only FRR "show version" over SSH, with strict pinned host-key
 checking and a server-held key. No private key or arbitrary target/command is sent to
 the browser. Wrong owner, tenant, role, expired/revoked grant or removed entitlement is
 denied server-side. A configured target is not a health guarantee. Unconfigured targets
 are labelled, not represented as connected.
 
-This is an SSH connectivity/authorization test, not yet an interactive terminal, full
-session recording, credential vault, or production broker. RDP/VNC devices can appear
-in inventory, but browser RDP/VNC transport is deliberately marked not implemented.
-Native Ubuntu desktop protocol reachability can be tested independently within the
-approved isolated lab; that is not a OpenPrivileged-mediated RDP/VNC session.
+The fixed probe above is only a connectivity/authorization test. Separate opt-in
+interactive SSH, browser RDP and browser VNC transports are implemented for approved
+isolated labs; see [interactive lab](interactive-lab.md) and [browser VNC](browser-vnc.md).
+They require configured targets and dependencies and are not enabled by a plain
+local-demo launch. This is not full session recording or a production broker.
 
 Opt-in real lab verification (performs only the configured read-only FRR SSH probe):
 

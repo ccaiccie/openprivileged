@@ -86,8 +86,8 @@ Do not substitute a plaintext file store. No command here changes production ACL
 
 **A staged account is not yet usable for SSH.** This version does not enable it,
 assign equipment groups, or automatically enroll it into the existing lab rotation
-worker. An explicit operator-only generalized enrollment path is now available below. The current live lab worker still has an explicit synthetic `vg-*` allowlist
-and a pre-enrolled `vg-tech-admin` binding. Merely creating `a.joe.bloe` must not
+worker. An explicit operator-only generalized enrollment path is now available below. The original synthetic lab adapter retains an explicit `vg-*` allowlist
+and requires a pre-enrolled `vg-tech-admin` binding. Merely creating `a.joe.bloe` must not
 silently replace that account or break existing sessions.
 
 Activation must be an explicitly approved maintenance action: verify the object's
@@ -96,9 +96,8 @@ rights, enable during the approved maintenance window and verify initial authent
 enroll the exact technician-GUID-to-account-GUID/device binding into durable rotation
 state, then test hidden-credential
 SSH and the four-hour rotation/recovery path. If enrollment/storage cannot be
-confirmed, keep broker access closed and disable/reconcile the account. No
-activation, live AD writes, deployments, or permission changes were performed as
-part of implementing this feature.
+confirmed, keep broker access closed and disable/reconcile the account. The provisioning workflow itself does not perform activation, equipment permission
+changes or deployment.
 
 ## Security checks and limitations
 
@@ -156,14 +155,14 @@ with integration or rotation storage fails closed instead of overwriting that st
 1. Sign in with a mapped superadmin identity and open **Setup AD** in the left navigation.
 2. Set the LDAPS reader and user/group search bases. The server must trust the DC certificate.
 3. Click **Load domain groups**. This discovers security groups under the chosen group base through read-only, paged queries. No AD memberships are changed.
-4. Choose a group, click **Add selected group**, and select one or more application roles: superadmin, admin, technician, approver, auditor. Multiple group memberships combine their roles and device assignments. A OpenPrivileged role does not confer domain-admin rights.
+4. Choose a group, click **Add selected group**, and select one or more application roles: superadmin, admin, technician, approver, auditor. Multiple group memberships combine their roles and device assignments. An OpenPrivileged role does not confer domain-admin rights.
 5. Select assigned devices for technician access. Device IDs are checked against the integration's organization/customer inventory.
 6. **Test connection & permissions**, then **Save & activate**. The current immutable AD identity must retain superadmin access; otherwise saving is rejected. A successful save revokes sessions and requires sign-in again. **Discard changes** restores the saved configuration.
 
 Nested group resolution is opt-in and uses AD's transitive-membership matching rule under the configured group base. Primary-group membership is not used; assign explicit security-group memberships. Authorization refreshes the AD identity on requests and does not fall back to cached permissions when the directory is unavailable. Group discovery rejects partial/error/referral responses, repeated page cookies, and catalogs larger than 10,000 groups; narrow the base if needed.
 
 
-## Explicit generalized enrollment and runtime (not activated)
+## Explicit generalized enrollment and runtime (opt-in)
 
 The separate `ManagedAdRotationAdapter` supports multiple approved `a.username`
 accounts without widening the original hard-coded synthetic lab adapter. A private
@@ -188,7 +187,11 @@ runtime file must supply `managed_accounts`, with each entry containing:
 
 `managed_scope` contains the same `domain_base_dn` and `target_ou_dn` fields as the
 provisioning scope. The existing `directory`, `reader_password_file`, `ssh`,
-`vault_directory` and `key_file` fields remain required. `ssh` identifies the
+`vault_directory` and `key_file` fields remain required. The combined API runtime
+also still requires `rdp_fingerprint` and constructs the fixed `vg-ubuntu-rdp` lab
+target even in generalized managed SSH mode. Retain that validated legacy RDP
+scaffold; generalized account support is not yet a standalone arbitrary-inventory
+deployment mode. `ssh` identifies the
 preconfigured delegated Windows rotation authority with pinned known-hosts and
 approved private-key custody. Its account needs Reset Password only for the
 approved managed OU/users, plus directory reads. It does not need Domain Admin.

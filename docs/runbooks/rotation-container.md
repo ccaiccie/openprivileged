@@ -1,6 +1,6 @@
 # Combined API + password-rotation container
 
-This packages the existing **single-process, single-account AD lab prototype**.
+This packages the **single-process AD lab prototype**.
 It does not make the application production PAM, change account scope, create an
 AD principal, change AD permissions, or join equipment to a domain.
 
@@ -59,14 +59,17 @@ path references changed. Do not copy or reset the encrypted vault state:
 | `ssh.private_key` | `/run/vaultgate-secrets/dc-ssh-key` |
 | `ssh.known_hosts` | `/run/vaultgate-secrets/known_hosts` |
 
-The JSON itself belongs at `/run/vaultgate-secrets/config.json`. The dedicated
-host secrets directory should contain only those six files, with the approved
-existing values. Never include all lab-user password fixtures or unrelated SSH
+The JSON itself belongs at `/run/vaultgate-secrets/config.json`. For this baseline synthetic layout, the dedicated
+host secrets directory contains only those six dependency files plus `config.json`,
+with the approved existing values. Optional editable settings and provisioning
+require additional, separate writable store mounts and read-only key paths; the
+example Compose file does not add those mounts automatically. Review any extension
+against [configuration](../CONFIGURATION.md) and the store isolation requirements. Never include all lab-user password fixtures or unrelated SSH
 keys. Preserve the same vault encryption key; regenerating it destroys access to
 the existing ciphertext. Keep the directory outside this repository and outside
 shared/cloud-synced folders. Key custody on the same host is still a lab limitation.
 
-Copy `.env.example` to an operator-private file outside the repository and fill
+Copy `lab/docker/rotation/.env.example` to an operator-private file outside the repository and fill
 in the two existing absolute directories and numeric owner IDs. This file contains
 paths only, not secret values. Compose will refuse missing variables or missing
 mount directories instead of silently creating them.
@@ -121,9 +124,10 @@ could restore a stale password. Do not start the old process beside the containe
 - The API's grants/sessions/audit are still in-memory. Container restart discards
   them even though the encrypted rotation state survives. This is not a durable
   production control plane.
-- This package retains only the explicitly allowlisted synthetic `vg-tech-admin`
-  account. Administrator-based AD reset authority remains a lab-only limitation;
-  a dedicated narrowly delegated identity is a separate security change.
+- The original adapter retains its explicitly allowlisted synthetic account. The
+  optional generalized managed-account runtime requires separate configuration and
+  enrollment; see [managed accounts](../AD-MANAGED-ACCOUNTS.md). Delegate reset
+  authority narrowly rather than using a domain administrator.
 - No new autostart configuration, alerts, HA, central key custody or backup system
   is installed by this repository work. Containerization solves packaging and
   makes supervision available; it does not establish production readiness.
@@ -139,17 +143,7 @@ privileges, and only the fixture plus the read-only smoke-script mounts. The
 ownership, and sends SIGTERM. `restart` verifies the preserved generation/deadline
 and confirms no duplicate rotation. Never point this script at real vault data.
 
-## Approved your development machine cutover, 2026-11-13
 
-The owner subsequently approved replacing the host combined process. It was
-stopped gracefully and `vaultgate-rotation-combined-1` was started with the same
-original encrypted vault, scoped configuration and six dedicated read-only
-configuration/credential files. The application remains at
-`http://127.0.0.1:8766/technician`. No Docker boot/firewall/routing settings changed.
-
-The health endpoint now reports a secret-free worker liveness snapshot: thread
-alive, completed polling cycles, age since the last cycle, account state,
-generation and due timestamp. Readiness requires a live, recently progressing
-worker plus a ready account, not just a running web server. This does not replace
-external failure alerts. The initial post-cutover generation remained 2 and next
-due time remained 2026-11-14 01:56:45 UTC; no early password rotation was requested.
+For current health semantics, scheduled-rotation verification and backup/recovery
+precautions, see the [operator guide](../OPERATIONS.md). Example packaging does not
+prove that a service has been deployed or tested in your environment.

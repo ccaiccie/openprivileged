@@ -8,6 +8,19 @@ copy of a running environment. No passwords, private keys, vault state, machine-
 inventory or operational account bindings are included. Read [SECURITY.md](SECURITY.md)
 and [the release checklist](docs/FIRST-RELEASE.md) before use or publication.
 
+## Documentation
+
+Start with the [documentation index](docs/README.md) for the complete guide set.
+
+- **First run:** [Installation](docs/INSTALLATION.md) and [user guide](docs/USER-GUIDE.md).
+- **Superadmins:** [AD integration](docs/AD-INTEGRATION.md),
+  [group mappings and privileged accounts](docs/AD-MANAGED-ACCOUNTS.md).
+- **Operators:** [Configuration](docs/CONFIGURATION.md),
+  [deployment boundaries](docs/DEPLOYMENT.md), [operations](docs/OPERATIONS.md)
+  and [troubleshooting](docs/TROUBLESHOOTING.md).
+- **Contributors:** [Architecture](docs/ARCHITECTURE.md),
+  [development](docs/DEVELOPMENT.md) and [contribution guidelines](CONTRIBUTING.md).
+
 ## First implementation: local control-plane prototype
 
 Implemented in `packages/vg_core` and `packages/vg_api`:
@@ -45,9 +58,10 @@ uv run --no-sync mypy
 ## Security and implementation boundary
 
 **This is not production PAM. Do not expose it using Cloudflare Tunnel or load real
-credentials.** Storage is in-memory and lost on restart; no database/RLS, OIDC/MFA,
-credential vault, session recording, collector, device account creation
-or withdrawal exists yet. An `active` grant remains a simulation unless the operator configures a lab target.
+credentials.** Control-plane storage is in-memory and lost on restart; no production database/RLS,
+OIDC/MFA, KMS-backed credential vault, full session recording, collector or verified
+device-account withdrawal exists yet. Optional isolated-lab account provisioning and
+encrypted rotation persistence are described below; neither makes this production PAM. An `active` grant remains a simulation unless the operator configures a lab target.
 Explicit isolated-lab targets support browser SSH and VNC with server-side grant and identity checks.
 These are local prototypes, not a general production broker. Active connections are rechecked every second
 and close on expiry, revocation, logout or role changes. Remote background jobs and shared desktop state
@@ -109,4 +123,3 @@ See [AD managed-account configuration](docs/AD-MANAGED-ACCOUNTS.md) for the `a.u
 OpenPrivileged Community original code is licensed under the
 [Apache License 2.0](LICENSE). Third-party components retain their own licenses
 and notices; see [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
-# openprivileged

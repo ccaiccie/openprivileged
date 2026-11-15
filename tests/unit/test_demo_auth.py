@@ -347,3 +347,14 @@ def test_session_expiry_and_login_rotation(app, monkeypatch):
     now += 3601
     assert client.get("/auth/me").status_code == 401
     assert client.get("/v1/devices").status_code == 401
+
+
+def test_provisioning_help_requires_activation_before_enrollment(app):
+    """Setup guidance must match the managed runner's enabled-account precondition."""
+    client = client_for(app)
+    login(client, "superadmin")
+    response = client.get("/admin")
+    assert response.status_code == 200
+    assert "Enrollment requires an already-enabled account" in response.text
+    assert "this form does not perform activation or enrollment" in response.text
+    assert "enrollment before enabling the account" not in response.text
